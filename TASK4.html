@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #task-input-container {
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    input {
+      width: 250px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    #tasks {
+      list-style-type: none;
+      padding: 0;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .task-item.completed {
+      text-decoration: line-through;
+      color: #999;
+    }
+
+    .task-actions button {
+      margin-left: 5px;
+    }
+
+    .task-time {
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>To-Do App</h1>
+
+  <div id="task-input-container">
+    <input type="text" id="task-input" placeholder="Enter your task">
+    <input type="datetime-local" id="task-datetime">
+    <button id="add-task-button">Add Task</button>
+  </div>
+
+  <ul id="tasks"></ul>
+
+  <script>
+    const taskInput = document.getElementById("task-input");
+    const taskDateTime = document.getElementById("task-datetime");
+    const addTaskButton = document.getElementById("add-task-button");
+    const tasksList = document.getElementById("tasks");
+
+    addTaskButton.addEventListener("click", () => {
+      const taskText = taskInput.value.trim();
+      const taskTime = taskDateTime.value;
+
+      if (!taskText) {
+        alert("Please enter a task!");
+        return;
+      }
+
+      const taskItem = document.createElement("li");
+      taskItem.className = "task-item";
+
+      const taskContent = document.createElement("span");
+      taskContent.textContent = taskText;
+
+      const taskTimeDisplay = document.createElement("div");
+      taskTimeDisplay.className = "task-time";
+      taskTimeDisplay.textContent = taskTime ? `Due: ${taskTime}` : "";
+
+      const taskActions = document.createElement("div");
+      taskActions.className = "task-actions";
+
+      const completeButton = document.createElement("button");
+      completeButton.textContent = "Mark Completed";
+      completeButton.addEventListener("click", () => {
+        taskItem.classList.toggle("completed");
+      });
+
+      const editButton = document.createElement("button");
+      editButton.textContent = "Edit";
+      editButton.addEventListener("click", () => {
+        const newTaskText = prompt("Edit your task:", taskText);
+        const newTaskTime = prompt("Edit your date & time:", taskTime);
+        if (newTaskText !== null) {
+          taskContent.textContent = newTaskText;
+        }
+        if (newTaskTime !== null) {
+          taskTimeDisplay.textContent = newTaskTime ? `Due: ${newTaskTime}` : "";
+        }
+      });
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.addEventListener("click", () => {
+        tasksList.removeChild(taskItem);
+      });
+
+      taskActions.appendChild(completeButton);
+      taskActions.appendChild(editButton);
+      taskActions.appendChild(deleteButton);
+      taskItem.appendChild(taskContent);
+      taskItem.appendChild(taskTimeDisplay);
+      taskItem.appendChild(taskActions);
+      tasksList.appendChild(taskItem);
+
+      taskInput.value = "";
+      taskDateTime.value = "";
+    });
+  </script>
+</body>
+</html>
